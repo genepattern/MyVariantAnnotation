@@ -19,6 +19,14 @@ assert(Utils.var2str(("chrMT", "8271", "CACTGTGTAT", "C")) == "chrMT:g.8271_8279
 assert(Utils.var2str(("chrX", "14112", "CAGTGC", "TG")) == "chrX:g.14112_14117delinsTG")
 
 """
+Loading Variants
+"""
+
+true_vars = [("chr1", "117078761", "G", "A"), ("chr1", "149859187", "G", "A")]
+read_vars = Utils.load_variants("data/mareschal_ground_truth.tsv")
+assert(read_vars[:2] == true_vars)
+
+"""
 Query
 """
 
