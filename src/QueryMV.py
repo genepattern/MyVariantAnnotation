@@ -3,6 +3,7 @@ This module implements the API interface to MyVariant.info
 """
 
 import json
+import math
 import requests
 import sys
 
@@ -22,10 +23,16 @@ def get_annotations(variants, genome, fields='all',
         returns (dict): The JSON response from myvariant.info
     """
     headers = {'content-type': 'application/x-www-form-urlencoded'}
-    params = ""
-    params += "ids="+",".join(list(map(var2str, variants)))
-    params += "&fields="+fields
+    params = "fields="+fields
     if genome == "hg38":
         params += "&hg38=true"
-    resp = requests.post(url, params, headers=headers)
-    return json.loads(resp.text)
+    query_res = []
+    n_chunks = int(math.ceil(len(variants)/1000.0))  #myvariant limits to 1000
+    for i in range(n_chunks):
+        lower_bound = 1000*i
+        upper_bound = min(lower_bound+1000, len(variants))
+        chunk = variants[lower_bound:upper_bound]
+        params += "&ids="+",".join(list(map(var2str, chunk)))
+        resp = requests.post(url, params, headers=headers)
+        query_res += json.loads(resp.text)
+    return query_res

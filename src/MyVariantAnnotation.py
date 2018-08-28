@@ -49,7 +49,15 @@ fields = ",".join([
 fields += ","+args.fields
 
 ### Query variants
-query_res = QueryMV.get_annotations(variants, args.genome, 
+"""query_res = []
+n_chunks = int(math.ceil(len(variants)/1000.0))
+for i in range(n_chunks):
+    lower_bound = 1000*i
+    upper_bound = min(lower_bound+1000, len(variants))
+    chunk = variants[lower_bound:upper_bound]
+    query_res += QueryMV.get_annotations(chunk, args.genome, 
+                                        url=args.url, fields=fields)"""
+query_res = QueryMV.get_annotations(variants, args.genome,
                                     url=args.url, fields=fields)
 
 ### Parse to DataFrame
