@@ -55,5 +55,9 @@ query_res = QueryMV.get_annotations(variants, args.genome,
 ### Parse to DataFrame
 query_df = Utils.json2df(query_res)
 
+### Re-arrange columns
+cols_ordered = [line.strip('\n') for line in open("data/dbnsfp_col_order.txt").readlines()]
+query_df = query_df[cols_ordered]
+
 ### Write results to output
 query_df.to_csv(args.output, index=False, sep='\t')
