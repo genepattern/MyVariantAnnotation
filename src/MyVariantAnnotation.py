@@ -19,10 +19,6 @@ parser.add_argument("-i", "--input", type=str,
 parser.add_argument("-o", "--output", type=str,
                     help="annotation output file")
 
-parser.add_argument("-t", "--transcriptkey", type=str,
-                    help="MyVariant field to use for transcript identifiers",
-                    default="dbnsfp.vest3.transcriptid")
-
 parser.add_argument("-f", "--fields", type=str, 
                     help="comma-separated list of additional query fields",
                     default="")
@@ -48,16 +44,13 @@ variants = Utils.load_variants(args.input)
 
 ### Default Fields
 fields = ",".join([
-    "dbnsfp.vest3.transcriptvar", "dbnsfp.1000gp3.*af", "dbnsfp.ensembl.geneid"
+    line.strip('\n') for line in open("data/dbnsfp_cols.txt").readlines()
 ])
 fields += ","+args.fields
-fields += ","+args.transcriptkey
 
 ### Query variants
 query_res = QueryMV.get_annotations(variants, args.genome, 
                                     url=args.url, fields=fields)
-
-print(query_res[:20])
 
 ### Parse to DataFrame
 query_df = Utils.json2df(query_res)
