@@ -15,6 +15,7 @@ dbnsfp.ensembl.geneid
 dbnsfp.rsid
 dbnsfp.vest3.transcriptvar
 dbnsfp.vest3.transcriptid
+cadd.consequence
 dbnsfp.aa.refcodon
 dbnsfp.interpro_domain
 dbnsfp.1000gp3.sas_af
