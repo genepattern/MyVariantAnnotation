@@ -112,7 +112,8 @@ def json2df(jd):
     df = pd.io.json.json_normalize(jd)
     for col in df.columns:
         df[col] = df[col].apply(parse_lists)
-    ## dbnsfp parsing steps
+    ## dbnsfp-specific parsing steps
+    ## dbnsfp.aa
     for i, row in df.iterrows():
         if not pd.isnull(row['dbnsfp.aa']):
             row['dbnsfp.aa.refcodon'] = '|'.join([rc.split('=')[-1] 
@@ -123,18 +124,49 @@ def json2df(jd):
 Read Input
 """
 
-def load_variants(path):
+def load_vcf(path):
     """
-    Loads a list of tuples of variants from a path. Variants
+    Takes the path to a VCF file and parses it into a list
+    of tuples representing variants
+
+        path (str): The path to a variant input file
+
+        returns ([(str, str, str, str)]): The variant tuples
+    """
+    vcf_lines = [line.strip('\n') for line in open(path).readlines()]
+    variant_lines = list(filter(lambda x: x[0] != "#", vcf_lines))
+    variants = []
+    for line in variant_lines:
+        tkns = line.split('\t')
+        variants.append((tkns[0], tkns[1], tkns[3], tkns[4]))
+    return variants
+
+def load_tsv(path):
+    """
+    Loads a list of tuples of variants from a tsv. Variants
     should come from a tab-separated file with at minimum column
     headers "chromosome", "position", "reference", "alternate"
 
         path (str): The path to a variant input file
 
-        return ([(str, str, str, str)]): The variant tuples
+        returns ([(str, str, str, str)]): The variant tuples
     """
     variants = []
     df = pd.read_csv(path, sep='\t')
     for i, row in df.iterrows():
         variants.append((row['chromosome'], str(row['position']), row['reference'], row['alternate']))
     return variants
+
+def load_variants(path):
+    """
+    Takes either a VCF or TSV and returns a list of tuples
+    representing variants
+
+        path (str): The path to a variant input file
+
+        returns ([(str, str, str, str)]): The variant tuples
+    """
+    if path.split('.')[-1] == "vcf":
+        return load_vcf(path)
+    else:
+        return load_tsv(path)
