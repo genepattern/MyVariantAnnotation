@@ -6,8 +6,8 @@ import argparse
 import pandas as pd
 import sys
 
-import src.QueryMV as QueryMV
-import src.Utils as Utils
+import QueryMV as QueryMV
+import Utils as Utils
 
 
 ### Build arguments parser
@@ -44,7 +44,7 @@ variants = Utils.load_variants(args.input)
 
 ### Default Fields
 fields = ",".join([
-    line.strip('\n') for line in open("data/dbnsfp_cols.txt").readlines()
+    line.strip('\n') for line in open("dbnsfp_cols.txt").readlines()
 ])
 fields += ","+args.fields
 
@@ -56,7 +56,7 @@ query_res = QueryMV.get_annotations(variants, args.genome,
 query_df = Utils.json2df(query_res)
 
 ### Re-arrange columns
-cols_ordered = [line.strip('\n') for line in open("data/dbnsfp_col_order.txt").readlines()]
+cols_ordered = [line.strip('\n') for line in open("dbnsfp_col_order.txt").readlines()]
 query_df = query_df[cols_ordered]
 
 ### Write results to output

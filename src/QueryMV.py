@@ -7,7 +7,7 @@ import math
 import requests
 import sys
 
-from src.Utils import var2str
+from Utils import var2str
 
 def get_annotations(variants, genome, fields='all', 
                     url="http://myvariant.info/v1/variant"):
