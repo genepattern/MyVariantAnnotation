@@ -46,7 +46,9 @@ variants = Utils.load_variants(args.input)
 fields = ",".join([
     line.strip('\n') for line in open("dbnsfp_cols.txt").readlines()
 ])
-fields += ","+args.fields
+
+if args.fields != "":
+    fields += ","+args.fields
 
 ### Query variants
 query_res = QueryMV.get_annotations(variants, args.genome,
