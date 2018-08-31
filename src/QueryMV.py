@@ -24,9 +24,11 @@ def get_annotations(variants, genome, fields='all',
     """
     headers = {'content-type': 'application/x-www-form-urlencoded'}
     params = "fields="+fields
+    params += "&email=gp-info@broadinstitute.org"
     if genome == "hg38":
         params += "&hg38=true"
     query_res = []
+    print(params)
     n_chunks = int(math.ceil(len(variants)/1000.0))  #myvariant limits to 1000
     for i in range(n_chunks):
         lower_bound = 1000*i
