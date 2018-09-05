@@ -58,7 +58,7 @@ def parse_dict(d):
 
         returns (str): String represenation of d described above
     """
-    return ",".join([str(key)+"="+str(value) for key, value in d.iteritems()])
+    return ",".join([str(key)+"="+str(value) for key, value in d.items()])
 
 def parse_dict_list(dl):
     """
